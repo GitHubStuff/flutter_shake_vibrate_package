@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  rxdart: ^0.21.0
   sensors: ^0.4.1+7
 
 dev_dependencies:
