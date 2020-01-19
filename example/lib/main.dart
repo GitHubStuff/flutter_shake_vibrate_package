@@ -28,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with OnShakeHandler {
   String _counter = 'Waiting';
   OnShakeHandler _onShakeHandler = OnShakeHandler();
+  OnAxisMonitor _onAxisMonitor = OnAxisMonitor(trace: true);
 
   @override
   void shakeEventListener(ShakeData data) {
@@ -36,6 +37,15 @@ class _MyHomePageState extends State<MyHomePage> with OnShakeHandler {
     setState(() {
       _counter = answer;
     });
+  }
+
+  @override
+  void dispose() {
+    /// Close the stream controller of the superclass
+    closeListening();
+    _onShakeHandler.closeListening();
+    _onAxisMonitor.closeListening();
+    super.dispose();
   }
 
   @override
@@ -55,12 +65,23 @@ class _MyHomePageState extends State<MyHomePage> with OnShakeHandler {
               '$_counter',
               style: Theme.of(context).textTheme.title,
             ),
+            StreamBuilder<AxisData>(
+              stream: _onAxisMonitor.stream,
+              builder: (context, data) {
+                if (!data.hasData) return CircularProgressIndicator();
+                AxisData result = data.data;
+                return Text('${result.axis.toString()} range: ${result.axisDistance}');
+              },
+            ),
             StreamBuilder<ShakeData>(
               stream: _onShakeHandler.stream,
               builder: (context, data) {
                 if (data.hasData) {
                   ShakeData result = data.data;
-                  return Text('${result.timestamp.toLocal().toIso8601String()} Count: ${result.shakeCount}');
+                  return Text(
+                    '${result.timestamp.toLocal().toIso8601String()} Count: ${result.shakeCount}',
+                    style: Theme.of(context).textTheme.title,
+                  );
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -80,10 +101,12 @@ class _MyHomePageState extends State<MyHomePage> with OnShakeHandler {
   void _shaker() {
     if (_counter == 'Waiting') {
       startListening();
-      _onShakeHandler.startListening();
+      _onShakeHandler.startListening(vibrationDuration: Duration(milliseconds: 500));
+      _onAxisMonitor.startListening();
     } else {
       stopListening();
       _onShakeHandler.stopListening();
+      _onAxisMonitor.stopListening();
       setState(() {
         _counter = 'Waiting';
       });

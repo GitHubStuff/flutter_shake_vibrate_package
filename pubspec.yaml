@@ -1,6 +1,6 @@
 name: flutter_shake_vibrate_package
 description: A Shake And Vibrate Flutter package.
-version: 0.0.3+1
+version: 0.0.3+2
 homepage: https://github.com/GitHubStuff/flutter_shake_vibrate_package
 
 environment:
@@ -13,6 +13,7 @@ dependencies:
     git:
       url: https://github.com/GitHubStuff/flutter_tracers.git
   sensors: ^0.4.1+7
+  vibration: ^1.2.2
 
 dev_dependencies:
   flutter_test:
