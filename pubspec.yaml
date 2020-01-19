@@ -1,6 +1,6 @@
 name: flutter_shake_vibrate_package
 description: A Shake And Vibrate Flutter package.
-version: 0.0.3
+version: 0.0.3+1
 homepage: https://github.com/GitHubStuff/flutter_shake_vibrate_package
 
 environment:

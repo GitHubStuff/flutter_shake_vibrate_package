@@ -80,7 +80,7 @@ class OnShakeHandler {
     }
   }
 
-  void dispose() {
+  void close() {
     _streamController.close();
   }
 }
